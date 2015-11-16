@@ -1,0 +1,25 @@
+#include<stdio.h>
+
+int main()
+{
+	int first_height;
+	int feet_height;
+	int n,i,m;
+
+	printf("enter first height pls>");
+	scanf("%d",&first_height);
+	printf("enter feet height>");
+	scanf("%d",&feet_height);
+	printf("enter the peak point>");
+
+	for(n=0;n<first_height;++n){		
+
+		for(m=0;m<n;++m){
+		printf("   ");}		
+		for(i=0;i<feet_height;++i){
+		printf("*");}
+	
+	printf("\n");
+	}
+	printf("%c",)
+}

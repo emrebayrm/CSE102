@@ -1,0 +1,6 @@
+
+Enter the coefficient of x^1> 
+Enter the coefficient of x^0> 
+Enter P(0) value of the resulting polynomial>
+Result of integral of 1st degree polynomial>
+1.000x^2+5.000x^1+0.000

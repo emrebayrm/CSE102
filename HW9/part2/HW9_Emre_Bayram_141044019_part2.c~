@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include"complex.h"
+
+int main()
+{
+	complex_t res;
+	complex_t comp1,comp2;
+
+	printf("Now You Can add complex numbers\n");
+	comp1 = get_complex();
+	comp2 = get_complex();
+	
+	res = summary_two_complex(comp1,comp2);
+	show_complex_number(res);
+
+	printf("Now You Can substract complex numbers\n");
+	comp1 = get_complex();
+	comp2 = get_complex();
+
+	res = extraction_two_complex(comp1,comp2);
+	show_complex_number(res);
+	
+	printf("Now You Can multiply complex numbers\n");
+	comp1 = get_complex();
+	comp2 = get_complex();
+
+	res = multipyly_two_complex(comp1,comp2);
+	show_complex_number(res);
+	
+	printf("Now You Can divide complex numbers\n");
+	comp1 = get_complex();
+	comp2 = get_complex();
+
+	res = divide_two_complex(comp1,comp2);
+	show_complex_number(res);
+
+	printf("Now You Can calculate norm of complex number\n");
+	comp1 = get_complex();
+
+	printf("%.2f is norm of ",norm_of_complex(comp1));
+	show_complex_number(comp1);
+	
+	return 0;
+}

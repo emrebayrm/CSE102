@@ -1,0 +1,106 @@
+/*###########################################################################*/
+/*HW3_Emre_Bayram_141044019_part1.c 										 */
+/*---------------------														 */
+/*Written by Emre Bayram on march 8, 2015									 */
+/*Description																 */
+/*---------------------														 */
+/*	This program printing bouncing ball's graph vertically					 */
+/*																			 */
+/*Input																		 */
+/*	-first height															 */
+/*	-feet height															 */
+/*	-character of peak point												 */
+/*	-character of path point												 */
+/*Output																	 */
+/*	-graphic of shape vertically											 */
+/*###########################################################################*/
+/*																			 */
+/*---------------------------------------------------------------------------*/
+/*								Includes									 */
+/*---------------------------------------------------------------------------*/
+#include<stdio.h>
+/*---------------------------------------------------------------------------­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­*/
+/*                         Function Prototypes                               */
+/*­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­---------------------------------------------------------------------------*/
+
+/*###########################################################################*/
+/*int draw_ver_diag_of_bb(int,int,char,char)								 */
+/*--------------*/
+int draw_ver_diag_of_bb(int,int,char,char);
+int draw_diag_step(int first_height, int feet_height,char peak_point,char path_point);
+int finish_diag(int);
+int main()
+{
+	int first_height;
+	int feet_height;
+	char peak_point;
+	char path_point;
+	int result,a,b;
+
+	printf("enter first height pls>");
+	scanf("%d",&first_height);
+	printf("enter feet height>");
+	scanf("%d",&feet_height);
+	printf("enter the peak point>");
+	scanf(" %c",&peak_point);
+	printf("enter the path point>");
+	scanf(" %c",&path_point);
+
+	result=draw_ver_diag_of_bb(first_height,feet_height,peak_point,path_point);
+	a=(result+1)/(first_height+1);
+	printf("L");
+	b=finish_diag(a);
+	printf(">\n");
+	if (b=1)
+		printf("the diagram is drawed succesfuly%d",b);
+	else printf("you entered 0 for first height the ball on the floor");
+	return 0;
+}
+
+
+int draw_ver_diag_of_bb(int first_height, int feet_height,char peak_point,char path_point)
+{
+
+	int x,result;
+	printf("^\n");
+	for(x=first_height;x>0;x--){
+		result+=draw_diag_step(first_height,feet_height,peak_point,path_point);
+		first_height--;
+	}
+	return result;
+}
+
+int draw_diag_step(int first_height, int feet_height,char peak_point,char path_point)
+{
+	int a;
+	int n,i,m;
+	int b,d;
+	a=first_height;
+	for(n=0;n<first_height;++n){		
+			printf("|");
+			for(m=0;m<feet_height*n;++m){printf(" ");}
+			for(i=0;i<feet_height;++i){printf("%c",path_point);}
+			printf("\n");}
+		printf("|");
+		for(m=0;m<feet_height*n;++m){printf(" ");}
+		printf("%c",peak_point);
+		printf("\n");
+		for(d=first_height;0<d;d--){
+			printf("|");
+			for(m=0;m<feet_height*d-feet_height;++m){printf(" ");}
+			for(i=0;i<feet_height;++i){printf("%c",path_point);}
+			printf("\n");
+		}
+	return (first_height*feet_height*2)+a;
+}
+
+int finish_diag(int lenght)
+{
+	if (lenght>1){
+		for(;lenght>0;--lenght){
+			printf("-");
+		}
+		return 1;
+	}
+	else return 0;
+}

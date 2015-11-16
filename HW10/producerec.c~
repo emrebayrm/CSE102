@@ -1,0 +1,37 @@
+#include<stdio.h>
+#define DEBUG
+typedef struct{	int app_id;
+				int patient_id;
+				int hour;
+				}Appointments_id;
+int main()
+{
+	Appointments_id appointment;
+	int size;
+	FILE *inp,
+		 *outp;
+	
+	inp = fopen("input.txt","r");
+	outp = fopen("Records.bin","wb");
+	fscanf(inp,"%d",&size);
+	fwrite(&size,sizeof(int),1,outp);		
+	while(fscanf(inp,"%d %d %d",&appointment.app_id,
+								&appointment.patient_id,
+								&appointment.hour) != EOF)
+		fwrite(&appointment,sizeof(appointment),1,outp);
+	
+	fclose(outp);
+
+	outp=fopen("Records.bin","rb");
+	#ifdef DEBUG
+	fread(&size,sizeof(int),1,outp);
+	printf("size = %d",size);
+	while(!feof(outp))
+	{
+		fread(&appointment,sizeof(appointment),1,outp);
+		printf("%d %d %d \n",appointment.app_id,appointment.patient_id,appointment.hour);
+	}
+	#endif
+	
+	return 0;
+}

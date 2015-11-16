@@ -1,0 +1,53 @@
+/*###########################################################################*/
+/*HW3_Emre_Bayram_141044019_part1.c 										 */
+/*-----------------------------												 */
+/*Written by Emre Bayram on march 7, 2015									 */
+/*Description																 */
+/*-----------------------------												 */
+/*																			 */
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+int count_the_number(int count);
+double calculate_the_new_height(double bounce,double ratio);
+double calculate_the_vertical_distance(double rebound,int);
+
+int main()
+{
+	int first_height;
+	double ratio;
+	double result;
+	double rebound;
+	int count=2;
+	FILE *outp;
+	outp=fopen("Result_table.txt","w");
+	
+	srand((unsigned)time(NULL));
+	ratio=(rand()%40+40)/100.00;
+	first_height=rand()%30+10;
+	fprintf(outp,"1 %5s"," ");
+	fprintf(outp,"%d %12s",first_height," ");
+	rebound=(first_height*ratio);
+	fprintf(outp,"%d\n",first_height);
+	result=first_height+rebound*2;
+	fprintf(outp,"%d %5s%.3f %6s%.3f\n",count," ",rebound," ",result);
+
+	while(rebound>2){
+		rebound=calculate_the_new_height(rebound,ratio);
+		result=calculate_the_vertical_distance(rebound,result);
+		count=count_the_number(count);
+		fprintf(outp,"%d %5s%.3f %6s%.3f\n",count," ",rebound," ",result);
+}	
+	fprintf(outp,"The bouncing is stopped and task completed...");
+
+	return 0;
+}
+double calculate_the_new_height(double bounce,double ratio){
+	return bounce*ratio;
+}
+double calculate_the_vertical_distance(double rebound, int result){
+	return (rebound*2)+result;
+}
+int count_the_number(int count){
+	return count+=1;
+}

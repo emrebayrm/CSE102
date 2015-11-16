@@ -1,0 +1,153 @@
+#include<stdio.h>
+
+#define PLAINTEXTFILE "/home/emre/Desktop/HW4/part1/PlainMessagesToSent.txt"
+#define ENCODEDFILE "/home/emre/Desktop/HW4/part1/EncodedMessages.txt"
+#define CRYPTEDFILE "/home/emre/Desktop/HW4/part1/CryptedMessages.txt"
+/*************************************************************
+ * Gets FILE* to write file and character to encode          *
+ * uses encoding table to convert plain text to              *
+ * encoded message                                           *
+ *************************************************************/
+void 
+encode_and_write_to_file(FILE *f_out_ptr, char character);
+
+/*************************************************************
+ * Gets FILE* f_in_ptr to read from plain text file and      *
+ * FILE* f_out_ptr to write message to encoded file          *
+ * return number of characters read from plain text          *
+ *************************************************************/
+int 
+encode_message(FILE *f_in_ptr, FILE *f_out_ptr);
+
+/*************************************************************
+ * Gets FILE* f_in_ptr to read from encoded text file and    *
+ * FILE* f_out_ptr to write message to encrypted file        *
+ * return encoded character number                           *
+ *************************************************************/
+int 
+crypt_message(FILE *f_in_ptr, FILE *f_out_ptr);
+
+/*************************************************************
+ * Reads plane text, creates encoded and crypted text files  *
+ *************************************************************/
+int main()
+{	
+	FILE *message,
+		 *encoded,
+		 *crypt;
+	
+	message=fopen(PLAINTEXTFILE,"r");
+	encoded=fopen(ENCODEDFILE,"w");
+	if (message==NULL && encoded==NULL){
+		printf("message file couldn't odened.");
+		return 1;
+	}
+	else encode_message(message,encoded);	
+
+	fclose(message);
+	fclose(encoded);
+	encoded=fopen(ENCODEDFILE,"r");
+	crypt=fopen(CRYPTEDFILE,"w");
+	if (encoded==NULL && crypt==NULL){
+		printf("encoded file couldn't opened.");
+		return 1;
+	}
+	else crypt_message(encoded,crypt);
+	fclose(encoded);
+	fclose(crypt);
+	return 0;
+}
+
+/*************************************************************
+ * Gets FILE* to write file and character to encode          *
+ * uses encoding table to convert plain text to              *
+ * encoded message                                           *
+ *************************************************************/
+void 
+encode_and_write_to_file(FILE *f_out_ptr, char character)
+{
+	
+	switch (character){
+		case 'E' : fprintf(f_out_ptr,"0");
+			break;
+		case 'I' : fprintf(f_out_ptr,"10");
+			break;
+		case ' ' : fprintf(f_out_ptr,"110");
+			break;
+		case 'T' : fprintf(f_out_ptr,"1110");
+			break;
+		case 'C' : fprintf(f_out_ptr,"11110");
+			break;
+		case 'N' : fprintf(f_out_ptr,"111110");
+			break;
+		case 'A' : fprintf(f_out_ptr,"1111110");
+			break;
+		case 'G' : fprintf(f_out_ptr,"11111110");
+			break;
+		case 'B' : fprintf(f_out_ptr,"111111110");
+			break;
+		case 'Z' : fprintf(f_out_ptr,"1111111110");
+			break;
+		case 'H' : fprintf(f_out_ptr,"11111111110");
+			break;
+		case 'L' : fprintf(f_out_ptr,"111111111110");
+			break;
+		case 'U' : fprintf(f_out_ptr,"1111111111110");
+			break;
+		case 'V' : fprintf(f_out_ptr,"11111111111110");
+			break;
+		case 'R' : fprintf(f_out_ptr,"111111111111110");
+			break;
+		case 'S' : fprintf(f_out_ptr,"1111111111111110");
+			break;
+		case 'Y' : fprintf(f_out_ptr,"11111111111111110");
+			break;
+	}
+
+}
+/*************************************************************
+ * Gets FILE* f_in_ptr to read from plain text file and      *
+ * FILE* f_out_ptr to write message to encoded file          *
+ * return number of characters read from plain text          *
+ *************************************************************/
+
+int 
+encode_message(FILE *f_in_ptr, FILE *f_out_ptr)
+{
+	int counter;
+	int a;
+	char character;
+	a=fscanf(f_in_ptr,"%c",&character);
+	while(EOF!=a){
+		encode_and_write_to_file(f_out_ptr,character);
+		a=fscanf(f_in_ptr,"%c",&character);
+	}
+	return 1;//counter
+}
+/*************************************************************
+ * Gets FILE* f_in_ptr to read from encoded text file and    *
+ * FILE* f_out_ptr to write message to encrypted file        *
+ * return number of characters read from encoded text file   *
+ *************************************************************/
+
+int crypt_message(FILE *f_in_ptr, FILE *f_out_ptr)
+{
+	int a,b;
+	int m=0,n=5;
+	a=fscanf(f_in_ptr,"%1d",&b);
+	while(EOF!=a){
+		if(b==1){
+			fprintf(f_out_ptr,"*");
+		}
+		else fprintf(f_out_ptr,"_");
+		a=fscanf(f_in_ptr,"%1d",&b);
+		++m;
+		if (m-n==0){
+			fprintf(f_out_ptr,"-");
+			m=0;
+			--n;
+		}
+		if(n==0) n=5;
+	}
+	return 1;
+}

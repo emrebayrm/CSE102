@@ -1,0 +1,75 @@
+/*
+ * complex.c implementation file
+*/
+#include<stdio.h>
+#include"HW9_Emre_Bayram_141044019_complex.h"
+#include<math.h>
+
+void show_complex_number(complex_t comp)
+{
+	printf("(%.2f + %.2fi)\n",comp.real,comp.imaginary);
+}
+
+complex_t get_complex(void)
+{
+	complex_t sum;
+	double num1,num2;
+	
+	printf("enter real part and imaginary part seperated by space >>");
+	scanf("%lf %lf",&num1,&num2);
+	
+	sum.real = num1;
+	sum.imaginary = num2;
+
+	return sum;
+}
+				
+complex_t summary_two_complex(complex_t complex1, complex_t complex2)
+{
+	complex_t sum;
+	
+	sum.real = complex1.real + complex2.real;
+	sum.imaginary = complex1.imaginary + complex2.imaginary;
+
+	return sum;
+}
+
+complex_t extraction_two_complex(complex_t complex1, complex_t complex2)
+{
+	complex_t sum;
+	
+	sum.real = complex1.real - complex2.real;
+	sum.imaginary = complex1.imaginary - complex2.imaginary;
+
+	return sum;
+}
+
+complex_t multipyly_two_complex(complex_t complex1, complex_t complex2)
+{
+	complex_t sum;
+	
+	sum.real = (complex1.real * complex2.real) - (complex1.imaginary * complex2.imaginary);
+	sum.imaginary = (complex1.real * complex2.imaginary) + (complex2.real * complex1.imaginary);
+	
+	return sum;
+}
+
+complex_t divide_two_complex(complex_t complex1, complex_t complex2)
+{
+	complex_t sum;
+	/*	a + bi	,	c + di */
+	/*	((ac + bd) / (c2 +d2)) + ((bc - ad)/(c2 + d2))i */
+	
+	sum.real = ((complex1.real * complex2.real) + (complex1.imaginary * complex2.imaginary))
+				/ (pow(complex2.real,2) + pow(complex2.imaginary,2));
+	
+	sum.imaginary = ((complex1.imaginary * complex2.real) - (complex1.real * complex2.imaginary))
+				/ (pow(complex2.real,2) + pow(complex2.imaginary,2));
+
+	return sum;
+}
+
+double norm_of_complex(complex_t complex)
+{
+	return 	sqrt(pow(complex.real,2)+pow(complex.imaginary,2));
+}

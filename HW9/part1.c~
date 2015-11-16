@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<string.h>
+
+#define INSTRCTR_FRST_HLF 5
+#define INSTRCTR_SECND_HLF 5.3
+#define DEGREE_A 17.5
+#define DEGREE_B 12
+#define DEGREE_C 9
+
+typedef struct { char name[30];
+				 char surname[30];
+				 char dep[30];
+				 char class1[10];
+				 char class2[10];
+				 double salary;
+			   } type_I;
+
+typedef struct { char name[30];
+				 char surname[30];
+				 double salary;
+				 char degree;
+			   } type_E;
+
+typedef union {	type_I ins;
+				type_E emp;
+			  } combine_type;
+
+double calculate_annual_salary(double salary, char type);
+void write_to_bin(char *inp_file, char *outp_bin_file);
+combine_type get_params(FILE* inp);
+combine_type salary_rise(combine_type person_info);
+
+int main()
+{
+	
+	write_to_bin("input.txt","bin_file.bin");	
+
+	FILE *inp;
+	
+	inp=fopen("bin_file.bin","rb");
+	int i=4;
+	combine_type a;
+	while(i){
+	fread(&a,sizeof(a),1,inp);
+	printf("%s %s %s %s %s %f\n",a.ins.name,a.ins.surname,a.ins.dep,a.ins.class1,a.ins.class2,a.ins.salary);
+	i--;
+	}
+	return 0;
+}
+
+double calculate_annual_salary(double salary, char type)
+{
+	double res;
+	switch(type){
+		case 'a' : res = ((salary*DEGREE_A)/100) + salary;
+			break;
+		case 'b' : res = ((salary*DEGREE_B)/100) + salary;
+			break;
+		case 'c' : res = ((salary*DEGREE_C)/100) + salary;
+			break;
+		case 'i'  : res = ((salary*INSTRCTR_FRST_HLF)/100) + salary;
+			res += ((res*INSTRCTR_SECND_HLF)/100) + res;
+	}
+	
+	return res;
+}
+
+void write_to_bin(char *inp_file, char *outp_bin_file)
+{
+	combine_type temp;
+	FILE *inp_text,
+		 *outp_bin;
+	
+	inp_text = fopen(inp_file,"r");
+	outp_bin = fopen(outp_bin_file,"wb");
+	
+	while(!feof(inp_text)){
+		
+		temp=salary_rise(get_params(inp_text));
+		fwrite(&temp,sizeof(temp),1,outp_bin);
+	}
+	
+	fclose(inp_text);
+	fclose(outp_bin);
+}
+
+combine_type get_params(FILE *inp)
+{
+	combine_type type;
+	char first_value[15];
+	char dead;
+	char c;
+	int flag=1;
+	int i=0;
+	
+	fscanf(inp,"%s",first_value);
+	
+	if(strcmp(first_value,"Instructor,") == 0)
+		{
+		fscanf(inp,"%s %s",type.ins.name,type.ins.surname);
+		
+		while(flag)
+		{
+			fscanf(inp,"%c",&c);
+			if(c == 44)
+				flag=0;
+			else type.ins.dep[i]=c;
+			
+			i++;
+		}
+		type.ins.dep[i]='\0';
+		fscanf(inp,"%s%s%lf",type.ins.class1,type.ins.class2,&type.ins.salary);
+		}
+	else if(strcmp(first_value,"Employee,") == 0)
+		fscanf(inp,"%s%s%lf%c %c",type.emp.name,type.emp.surname,&type.emp.salary
+								 ,&dead,&type.emp.degree);
+		
+	return type;
+}
+
+combine_type salary_rise(combine_type person_info)
+{	
+	if(person_info.ins.salary != 0)
+		person_info.ins.salary=calculate_annual_salary(person_info.ins.salary,'i');
+	else person_info.emp.salary=calculate_annual_salary(person_info.emp.salary,person_info.emp.degree);
+	
+	return person_info;
+}

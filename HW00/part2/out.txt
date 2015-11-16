@@ -1,0 +1,4 @@
+Enter 1st poly of coefficents(from higher to lower order)>
+Enter 2nd poly of coefficents(from higher to lower order)>
+result of multiplacation>
+30.000x^4+26.000x^3+26.000x^2+10.000x^1+4.000

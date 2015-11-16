@@ -1,0 +1,186 @@
+/*###########################################################################*/
+/*HW9_Emre_Bayram_141044019_part1.c 										 */
+/*-----------------------------												 */
+/*Written by Emre Bayram on April 28, 2015									 */
+/*Description																 */
+/*-----------------------------												 */
+/*	This program helps biologists.Microbiologists estimating the number of 	 */
+/*bacteria in a sample that contains bacteria that do not grow well on solid */
+/*media may use a statistical technique called the most probable number (MPN)*/
+/* method. Each of five tubes of nutrient medium receives 10 ml of sample. A */
+/*second set of five tubes receives 1 ml of sample per tube, and in each     */
+/*third set of five tubes,only 0.1 ml of sample is placed. Each tube in which*/
+/*bacterial growth is observed is recorded as a positive, and the numbers for*/
+/* the three groups are combined to create a triplet such as 5-2-1, which    */
+/*means that all five tubes receiving 10 ml of sample show bacterial growth, */
+/*only two tubes in the 1 ml group show growth, and only one of the 0.1 ml 	 */
+/*group is positive. A microbiologist would use this combination of positives*/
+/*triplet as an index to table like the table in Text file to determine that */
+/*the most probable number of bacteria per 100 ml of the sample is 70, and 	 */
+/*95% of the sample yielding this triplet contain between 30 and 210 bacteria*/
+/* per 100 ml.																 */
+/*																			 */
+/*Inputs																	 */
+/*	- A text file contains a table											 */
+/*	- A triplet from user													 */
+/*Output 																	 */
+/*	- Shows searched triplet 												 */
+/*	- Transforms text file to binary file 									 */
+/*NOTE: text.txt file should be exactly like that ex >>> 4-2-0 22 9 56 		 */
+/*###########################################################################*/
+/*																			 */
+/*---------------------------------------------------------------------------*/
+/*								Includes									 */
+/*---------------------------------------------------------------------------*/
+#include<stdio.h>
+/*---------------------------------------------------------------------------*/
+/*							Type definations								 */
+/*---------------------------------------------------------------------------*/
+typedef struct{	int s1;
+				int s2;
+				int s3;
+				} triplet_t;
+
+typedef struct{ triplet_t triple;
+				int index;
+				int lower;
+				int upper;
+				} Row_t;
+/*---------------------------------------------------------------------------*/
+/*							Function Prototypes								 */
+/*---------------------------------------------------------------------------*/
+void Into_Binary(FILE *text_input, FILE *binary_output);
+int Load_Mpn_table(FILE *binary_input_file,Row_t mpn_table[], int maxsize);
+Row_t search(Row_t mpn_table[], int actual_size, const triplet_t triplet_to_search);
+int comparison(triplet_t value1,triplet_t value2);
+
+int main()
+{
+	Row_t table[10];	/*Table for coping information which is in the text file*/
+	Row_t show;			/*Used for show full information of searched values 	*/
+	triplet_t searchval;/*Search value											*/
+	int size;			/*size													*/
+	
+	FILE *text_inp,		/*Text File File pointer's*/
+		 *binary_out;	/*Binary File File pointer's*/
+	
+	/*Opening files*/
+	text_inp = fopen("text.txt","r");
+	binary_out = fopen("binary.bin","wb");
+	
+	/*Transforming to binary file*/
+	while(!feof(text_inp))
+		Into_Binary(text_inp,binary_out);
+	
+	fclose(text_inp);
+	fclose(binary_out);
+	
+	/*Opening binary file read mode*/
+	binary_out = fopen("binary.bin","rb");
+	
+	/*Get search triplet*/	
+	printf("Enter combination of positives triplet by white spaces>>> \n");
+	scanf("%d%d%d",&searchval.s1,&searchval.s2,&searchval.s3);
+	
+	/*Used when debugging*/
+	#if defined (DEBUG)
+	Row_t as;
+	while(!feof(binary_out))
+	{
+		fread(&as,sizeof(as),1,binary_out);
+		printf("%d %d %d %d %d %d \n" ,as.triple.s1,as.triple.s2,as.triple.s3
+									  ,as.index,as.lower,as.upper);	
+	}
+	#endif
+	
+	/*Main process*/
+	while(!feof(binary_out))
+	{
+		/*Get table And process with the information*/
+		size = Load_Mpn_table(binary_out,table,10);
+		show = search(table,size,searchval);
+		/*if index member different from zero that means there is match because*/
+		/*changed initial value												   */
+		if(show.index != 0)
+		{
+			/*Showing founded values*/
+			printf("There is a match found: \n");
+			printf("MPN=%d; 95%% of samples contain between %d and %d bacteria/ml."
+												,show.index,show.lower,show.upper);
+			return 0;
+		}
+		
+	}
+
+	printf("There is no match found with this values >>> %d %d %d.",searchval.s1
+																   ,searchval.s2
+																   ,searchval.s3);	
+	return 0;
+}
+
+/*This function Transforms text file to binary file and it can read just 10	  */
+/*value and process it.														  */
+void Into_Binary(FILE *text_input, FILE *binary_output)
+{
+	Row_t res;
+	int i=0;
+	char dead;
+	
+	/*Transforming...*/
+	while(!feof(text_input) && i != 10)
+	{
+		fscanf(text_input,"%d%c%d%c%d %d %d %d ",&res.triple.s1,&dead,&res.triple.s2,&dead,&res.triple.s3
+								 ,&res.index,&res.lower,&res.upper);
+		fwrite(&res,sizeof(res),1,binary_output);
+		/*Used for debugging*/
+		#if defined (DEBUG)
+		printf("%d %d %d %d %d %d %d , i=%d\n",res.triple.s1,dead,res.triple.s2,res.triple.s3
+								 ,res.index,res.lower,res.upper , i);
+		#endif
+		++i;
+	}
+}
+
+/*This function takes binary file and fills mpn_table with maxsize. 		  */
+/*In return size of readed value.*/
+int Load_Mpn_table(FILE *binary_input_file,Row_t mpn_table[], int maxsize)
+{	
+	int i=0;
+	while(!feof(binary_input_file) && i != maxsize)	
+	{
+		fread(&mpn_table[i],sizeof(Row_t),1,binary_input_file);
+		++i;
+	}
+	
+	return i;
+}
+
+/*This function takes mpn table size and wish to search value in the table	  */
+/*In return founded information in type Row_t								  */
+Row_t search(Row_t mpn_table[], int actual_size, const triplet_t triplet_to_search)
+{
+	int i;
+	Row_t res;					  /*return value*/
+	res = (Row_t){{0,0,0},0,0,0}; /*Initializing to zero*/
+
+	/*Searching...*/	
+	for(i=0;i<actual_size;++i)
+	{
+		if(comparison(mpn_table[i].triple,triplet_to_search) == 1)
+			res = mpn_table[i];
+	}
+	
+	return res;
+}
+
+/*This function compares 2 values in triplet_t type of all members			  */
+int comparison(triplet_t value1,triplet_t value2)
+{
+	int ans=0;
+	
+	/*comparing...*/
+	if(value1.s1 == value2.s1 && value1.s2 == value2.s2 && value1.s3 == value2.s3)
+		ans=1;
+	
+	return ans;
+}

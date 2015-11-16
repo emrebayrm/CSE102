@@ -1,0 +1,23 @@
+<Size>4</Size>
+<Records>
+	<Appointment>
+		<app_id>8</app_id>
+		<patient>2</patient_id>
+		<hour>11</hour>
+	</Appointments>
+	<Appointment>
+		<app_id>2</app_id>
+		<patient>5</patient_id>
+		<hour>19</hour>
+	</Appointments>
+	<Appointment>
+		<app_id>11</app_id>
+		<patient>2</patient_id>
+		<hour>14</hour>
+	</Appointments>
+	<Appointment>
+		<app_id>203</app_id>
+		<patient>20</patient_id>
+		<hour>11</hour>
+	</Appointments>
+</Records>

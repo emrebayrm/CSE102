@@ -1,0 +1,21 @@
+#include"part3.h"
+#include<string.h>
+node_t* make_independent_copy_ll(node_t* head)
+{
+	node_t *copy,*new;
+	new = head;
+	while(new == NULL){
+		new = malloc(sizeof(node_t));
+       	new->app_id = head->app_id;
+        new->hour = head->hour;
+        new->patient_id = head->patient_id;
+        new->name = head->name;
+        new->history = head->history;
+        new = head->next;
+		copy = new;
+	}
+	
+	strcpy(copy->name,"kopyaa");
+	
+	return copy;
+}

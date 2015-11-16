@@ -1,0 +1,38 @@
+/*Part1.c test file */
+
+#include<stdio.h>
+#include"part1.h"
+#include<stdlib.h>
+
+int main(int argc , char *argv[])
+{
+	int size;
+	Appointment_t *appo;
+	Working_hours_t hours;
+	Files_t files;
+
+	#ifdef DEBUG
+	printf("STARTED argc = %d %s \n",argc,argv[1]);
+	#endif
+	get_main_arguments(argc,argv,&hours,&files);
+	
+	appo = getRequests(&files,&size);
+	#ifdef DEBUG
+	printf("allocated array's siz is %d \n",size);
+	#endif
+	
+    write_appointments(appo,size,&files);
+
+    print_parameters(&files,&hours);
+
+    #ifdef DEBUG
+    printf("%s %s %s %s %s %s",files.records_file_n
+                           ,files.patients_file_n
+                           ,files.accepted_appo_file_n
+                           ,files.delete_file_n
+                           ,files.parameters_file_n
+                           ,files.readable_records_file_n);
+    #endif
+
+	return 0;
+}

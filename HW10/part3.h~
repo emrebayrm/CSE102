@@ -1,0 +1,3 @@
+#include"part2.h"
+
+extern node_t* make_independent_copy_ll(node_t* head);

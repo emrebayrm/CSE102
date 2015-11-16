@@ -1,0 +1,32 @@
+#include<stdio.h>
+#define TRUE 1
+#define FALSE 0
+int is_letter(char a);
+
+int main()
+{
+	char a;
+	int b;
+		
+	scanf("%c",&a);
+
+	a=is_letter(a);
+
+	printf("%d",a);
+
+	return 0;
+}
+int 
+is_letter(char c)
+{
+	/* Hint: Look for difference with 'A' to understand 
+	 * character is a big letter or not. Use ASCII codes to
+	 * determine if it is a big letter or not          
+	 */
+	/*ASCI codes starts 65 ends 90*/
+	printf("%d",(int)c);
+	if ((int)c>=65&&(int)c<=90){
+		return TRUE;
+	}	
+	return FALSE;
+}

@@ -1,0 +1,34 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+#ifndef PART1_H
+#define PART1_H 1
+
+#define DEF_START_HOUR 9
+#define DEF_END_HOUR 17
+
+typedef struct{	int app_id;
+				int patient_id;
+				int hour;
+				}Appointment_t;
+typedef struct{	int start;
+				int end;
+				}Working_hours_t;
+typedef struct{	const char* records_file_n;
+				const char* patients_file_n;
+				const char* delete_file_n;
+ 				const char* readable_records_file_n;
+ 				const char* accepted_appo_file_n;
+ 				const char* parameters_file_n;
+ 				}Files_t;
+
+extern Appointment_t* getRequests(const Files_t* files, int* size);
+
+extern void write_appointments(Appointment_t appointments[], int size,const Files_t* files);
+
+extern void get_main_arguments(int argc, char *argv[], Working_hours_t* hours, Files_t* files);
+
+extern void print_parameters(const Files_t* files,const Working_hours_t* hours);
+
+#endif
