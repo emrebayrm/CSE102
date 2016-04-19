@@ -11,7 +11,7 @@ node_t* make_independent_copy_ll(node_t* head)
         new->patient_id = head->patient_id;
         strcpy(new->name,head->name);
         new->history = head->history;
-        new = head->next;
+        new = new->next;
 		copy = new;
 	}
 	
